@@ -75,7 +75,7 @@ open = [(start, None)]
 closed = []
 # B2:
 # B6:
-while len (open):
+while len (open) > 0:
     # B3
     # BFS:
     # O_TT = open.pop(0)
