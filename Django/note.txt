@@ -17,6 +17,11 @@ python manage.py shell
     a.body = "thanh ne"
     a.save()
 
+python manage.py shell
+    from django.contrib.auth.models import User
+    user = User.objects.create_user('thanh', 'thanh@gmail.com', 'thanh')
+    user.save()
+
 setting django-html:
     ctrl + ,
     find emmet include
