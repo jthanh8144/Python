@@ -1,0 +1,7 @@
+{% extends 'home/base.html' %} 
+    {% block content %}
+        <h1>blog</h1>
+        {% for item in pF %}
+            <p><a href="{% url 'blog:postDetail' item.id %}">{{ item.title }}</a></p>
+        {% endfor %}
+    {% endblock content %}
