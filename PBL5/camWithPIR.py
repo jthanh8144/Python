@@ -6,9 +6,9 @@ import signal
 import picamera
 import RPi.GPIO as GPIO
 
-test_pin = 11
+pir_pin = 11
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(test_pin, GPIO.IN)
+GPIO.setup(pir_pin, GPIO.IN)
 
 
 def detect(channel):
@@ -61,6 +61,6 @@ def send_to_server(time_out):
         client_socket.close()
 
 
-GPIO.add_event_detect(test_pin, GPIO.RISING, callback=detect, bouncetime=15000)
+GPIO.add_event_detect(pir_pin, GPIO.RISING, callback=detect, bouncetime=15000)
 signal.signal(signal.SIGINT, signal_handler)
 signal.pause()
