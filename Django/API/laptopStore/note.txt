@@ -1,0 +1,37 @@
+django-admin startproject name
+python manage.py startapp name-module
+
+python manage.py migrate
+python manage.py runserver 8888
+
+python manage.py createsuperuser
+python manage.py makemigrations
+python manage.py migrate
+
+{
+    "username": "thanh",
+    "password": "thanh12345"
+}
+
+{
+    "username": "thanh",
+    "email": "thanh@gmail.com",
+    "firstname": "thanh",
+    "lastname": "le",
+    "password": "thanh12345",
+    "re_password": "thanh12345"
+}
+
+python manage.py shell
+    from contact.models import contactForm
+    contactForm.objects.all()
+    a = contactForm()
+    a.username = "thanh"
+    a.email = "thanh@gmail.com"
+    a.body = "thanh ne"
+    a.save()
+
+python manage.py shell
+    from django.contrib.auth.models import User
+    user = User.objects.create_user('thanh', 'thanh@gmail.com', 'thanh')
+    user.save()
