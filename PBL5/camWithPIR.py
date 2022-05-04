@@ -1,5 +1,6 @@
 import time
 import RPi.GPIO as GPIO
+from gpiozero import AngularServo
 import io
 import socket
 import struct
@@ -10,11 +11,17 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
-test_pin = 11
+pir_pin = 11
+servo_pin = 18
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(test_pin, GPIO.IN)
-# GPIO.setup(40, GPIO.OUT)
+GPIO.setup(pir_pin, GPIO.IN)
+servo = AngularServo(servo_pin, min_pulse_width=0.0006, max_pulse_width=0.0023)
 
+# close is -90, open is 70
+def controlServo(angle):
+    servo.angle = angle
+
+controlServo(-90)
 
 def detect(channel):
     print('co chuyen dong!')
@@ -63,11 +70,13 @@ def receive_request():
         data = client_socket.recv(1024)
         if data != b'':
             if ('success' in data.decode('utf-8')):
-                print('do something')
+                print('success')
+                controlServo(70)
             if ('fail' in data.decode('utf-8')):
-                print('block something')
+                print('fail')
+                controlServo(-90)
 
-server_ip = '192.168.1.2'
+server_ip = '192.168.1.5'
 server_port = 9000
 client_socket = socket.socket() # socket.AF_INET, socket.SOCK_STREAM
 client_socket.connect((server_ip, server_port))
@@ -75,6 +84,6 @@ print('connected')
 
 start_new_thread(receive_request, ())
 
-GPIO.add_event_detect(test_pin, GPIO.RISING, callback=detect, bouncetime=15000)
+GPIO.add_event_detect(pir_pin, GPIO.RISING, callback=detect, bouncetime=15000)
 signal.signal(signal.SIGINT, signal_handler)
 signal.pause()
