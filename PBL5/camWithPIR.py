@@ -11,10 +11,14 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+isDoorOpen = False
+
 pir_pin = 11
 servo_pin = 18
+ir_pin = 40
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(pir_pin, GPIO.IN)
+GPIO.setup(ir_pin, GPIO.IN)
 servo = AngularServo(servo_pin, min_pulse_width=0.0006, max_pulse_width=0.0023)
 
 # close is -90, open is 70
@@ -66,23 +70,43 @@ def send_to_server(num_of_image):
         print('Something is error')
 
 def receive_request():
+    global isDoorOpen
     while True:
         data = client_socket.recv(1024)
         if data != b'':
             if ('success' in data.decode('utf-8')):
                 print('success')
                 controlServo(70)
+                isDoorOpen = True
+                print(isDoorOpen)
             if ('fail' in data.decode('utf-8')):
                 print('fail')
                 controlServo(-90)
 
-server_ip = '192.168.1.5'
+def auto_close_door(check_time):
+    global isDoorOpen
+    isDoorOpen = True
+    while True:
+        if (GPIO.input(ir_pin) == 0 and isDoorOpen == True):
+            print(GPIO.input(ir_pin))
+            for i in range (check_time):
+                time.sleep(1)
+                if (GPIO.input(ir_pin) != 0):
+                    break
+            if (GPIO.input(ir_pin) == 0):
+                print('auto close the door')
+                controlServo(-90)
+                isDoorOpen = False
+
+controlServo(-90)
+server_ip = '192.168.1.3'
 server_port = 9000
 client_socket = socket.socket() # socket.AF_INET, socket.SOCK_STREAM
 client_socket.connect((server_ip, server_port))
 print('connected')
 
 start_new_thread(receive_request, ())
+start_new_thread(auto_close_door, (5, ))
 
 GPIO.add_event_detect(pir_pin, GPIO.RISING, callback=detect, bouncetime=15000)
 signal.signal(signal.SIGINT, signal_handler)
