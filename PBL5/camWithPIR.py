@@ -74,14 +74,13 @@ def receive_request():
     while True:
         data = client_socket.recv(1024)
         if data != b'':
-            if ('success' in data.decode('utf-8')):
+            if ('open-door' in data.decode('utf-8')):
                 print('success')
                 controlServo(70)
                 isDoorOpen = True
                 print(isDoorOpen)
-            if ('fail' in data.decode('utf-8')):
-                print('fail')
-                controlServo(-90)
+            elif ('re-identify' in data.decode('utf-8')):
+                start_new_thread(send_to_server, (5, ))
 
 def auto_close_door(check_time):
     global isDoorOpen
@@ -98,8 +97,7 @@ def auto_close_door(check_time):
                 controlServo(-90)
                 isDoorOpen = False
 
-controlServo(-90)
-server_ip = '192.168.1.3'
+server_ip = '192.168.1.4'
 server_port = 9000
 client_socket = socket.socket() # socket.AF_INET, socket.SOCK_STREAM
 client_socket.connect((server_ip, server_port))
