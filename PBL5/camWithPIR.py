@@ -78,13 +78,11 @@ def receive_request():
                 print('success')
                 controlServo(70)
                 isDoorOpen = True
-                print(isDoorOpen)
             elif ('re-identify' in data.decode('utf-8')):
                 start_new_thread(send_to_server, (5, ))
 
 def auto_close_door(check_time):
     global isDoorOpen
-    isDoorOpen = True
     while True:
         if (GPIO.input(ir_pin) == 0 and isDoorOpen == True):
             print(GPIO.input(ir_pin))
