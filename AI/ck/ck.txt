@@ -1,0 +1,6 @@
+1. Mô tả thuật toán kmean
+B1: chọn ngẫu nhiên k phần từ để làm tâm của k nhóm
+B2: phân nhóm theo nguyên tắc gần trọng tâm nhóm nào thì phân vào nhóm đó
+B3: tính lại trọng tâm của k nhóm
+B4: quay lại bước 2 nếu có sự thay đổi
+2. 
