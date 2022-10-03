@@ -1,0 +1,19 @@
+add library of heroku
+
+change allow host
+
+config static file (have help in heroku)
+add config static to main url
+
+heroku git:remote -a weeboo-world
+heroku run bash -a weeboo-world
+
+heroku logs --tail
+
+// gen requi
+pip install pipreqs
+pipreqs . 
+
+// add to requi
+whitenoise==6.2.0
+gunicorn==20.1.0
